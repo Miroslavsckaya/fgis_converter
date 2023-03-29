@@ -12,8 +12,7 @@ def CsvToXmlConverter(input_filename, output_filename='application'):
         for row in reader:
             if all(string == '' for string in row):
                 break
-            result_serializer = factory.RecInfoFactory(row)
-            verification = result_serializer.SerializeVerification()
+            verification = factory.RecInfoFactory.create_verification_from_csv_row(row)
             application.result.append(verification)
 
     xml_creator = XmlSerializer()

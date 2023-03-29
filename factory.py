@@ -1,32 +1,42 @@
 import models.arshin as arshin
 from xsdata.models.datatype import XmlDate
 
+COL_TYPE_NUM = 0
+COL_MANUFACTURE_NUM = 1
+COL_MODIFICATION = 2
+COL_VRF_DATE = 3
+COL_VALID_DATE = 4
+COL_METROLOGIST = 5
+COL_TEST_DEV_NUM = 6
+COL_TEMPERATURE = 7
+COL_HUMIDITY = 8
+COL_PRESSURE = 9
+
 
 class RecInfoFactory:
-    def __init__(self, meter: list):
-        self.meter = meter
+    @staticmethod
+    def create_verification_from_csv_row(meter: list):
+        verification = RecInfoFactory.__create_default()
+        verification.mi_info = MiInfoFactory.create_from_csv_row(meter)
+        verification.vrf_date = XmlDate.from_string(RecInfoFactory.__format_date(meter[COL_VRF_DATE]))
 
-    def SerializeVerification(self):
-        verification = arshin.RecInfo()
-        verification = self.__FillDefault(verification)
-        verification.mi_info = MiInfoFactory(self.meter).SerializeMeterInfo()
-        verification.vrf_date = XmlDate.from_string(self.__FormatDate(self.meter[3]))
-
-        if self.meter[4] != '':
-            verification.valid_date = XmlDate.from_string(self.__FormatDate(self.meter[4]))
+        if RecInfoFactory.__date_is_valid(meter[COL_VALID_DATE]):
+            verification.valid_date = XmlDate.from_string(RecInfoFactory.__format_date(meter[COL_VALID_DATE]))
             verification.applicable = verification.Applicable()
             verification.applicable.sign_pass = verification.applicable.sign_mi = False
         else:
             verification.inapplicable = verification.Inapplicable()
             verification.inapplicable.reasons = 'Не соответствует требованиям МП'
 
-        verification.metrologist = self.meter[5]
-        verification.means = MeansFactory(self.meter).SerializeTest()
-        verification.conditions = ConditionsFactory(self.meter).SerializeConditions()
+        verification.metrologist = meter[COL_METROLOGIST]
+        verification.means = MeansFactory.create_test(meter[COL_TEST_DEV_NUM])
+        verification.conditions = ConditionsFactory.create_conditions_from_csv_row(meter)
 
         return verification
     
-    def __FillDefault(self, verification):
+    @staticmethod
+    def __create_default():
+        verification = arshin.RecInfo()
         verification.sign_cipher = 'ДГХ'
         verification.mi_owner = 'ФИЗИЧЕСКОЕ ЛИЦО'
         verification.type = arshin.RecInfoType.VALUE_2
@@ -35,43 +45,40 @@ class RecInfoFactory:
         return verification
     
     @staticmethod
-    def __FormatDate(string):
+    def __format_date(string):
         date = string.split('.')[::-1]
         return '-'.join(date)
-    
-class MiInfoFactory:
-    def __init__(self, meter):
-        self.mitype_number = meter[0]
-        self.manufacture_num = meter[1]
-        self.modification = meter[2]
 
-    def SerializeMeterInfo(self):
+    @staticmethod
+    def __date_is_valid(date):
+        pass
+
+
+class MiInfoFactory:
+    @staticmethod
+    def create_from_csv_row(meter):
         info = arshin.RecInfo.MiInfo()
         info.single_mi = info.SingleMi()
-        info.single_mi.mitype_number = self.mitype_number
-        info.single_mi.manufacture_num = self.manufacture_num
-        info.single_mi.modification = self.modification
+        info.single_mi.mitype_number = meter[COL_TYPE_NUM]
+        info.single_mi.manufacture_num = meter[COL_MANUFACTURE_NUM]
+        info.single_mi.modification = meter[COL_MODIFICATION]
         return info
-    
-class MeansFactory:
-    def __init__(self, meter):
-        self.number = meter[6]
 
-    def SerializeTest(self):
+
+class MeansFactory:
+    @staticmethod
+    def create_test(number):
         test = arshin.RecInfo.Means()
         test.mieta = test.Mieta()
-        test.mieta.number = self.number
+        test.mieta.number = number
         return test
-    
-class ConditionsFactory:
-    def __init__(self, meter):
-        self.temperature = meter[7]
-        self.hymidity =  meter[8]
-        self.pressure = meter[9]
 
-    def SerializeConditions(self):
+
+class ConditionsFactory:
+    @staticmethod
+    def create_conditions_from_csv_row(meter):
         conditions = arshin.RecInfo.Conditions()
-        conditions.temperature =  self.temperature
-        conditions.hymidity =  self.hymidity
-        conditions.pressure =  self.pressure
+        conditions.temperature = meter[COL_TEMPERATURE]
+        conditions.hymidity = meter[COL_HUMIDITY]
+        conditions.pressure = meter[COL_PRESSURE]
         return conditions
