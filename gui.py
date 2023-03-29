@@ -1,4 +1,4 @@
-from converter import CsvToXmlConverter
+from converter import convert_csv_to_xml_file
 import PySimpleGUIQt as sg
 
 
@@ -9,4 +9,4 @@ class GuiFrontend:
             text = text[7:]
         elif text[:6] == 'file:/':
             text = text[5:]
-        CsvToXmlConverter(text)
+        convert_csv_to_xml_file(text)

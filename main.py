@@ -1,6 +1,6 @@
 #! python
 import argparse
-from converter import CsvToXmlConverter
+from converter import convert_csv_to_xml_file
 import gui
 
 parser = argparse.ArgumentParser()
@@ -12,4 +12,4 @@ if args['path_input'] is None:
     window = gui.GuiFrontend()
     window.Start()
 else:
-    CsvToXmlConverter(args['path_input'], args['path_output'])
+    convert_csv_to_xml_file(args['path_input'], args['path_output'])
