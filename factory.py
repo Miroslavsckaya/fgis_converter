@@ -1,4 +1,5 @@
 import models.arshin as arshin
+from datetime import datetime
 from xsdata.models.datatype import XmlDate
 
 COL_TYPE_NUM = 0
@@ -18,15 +19,16 @@ class RecInfoFactory:
     def create_verification_from_csv_row(meter: list):
         verification = RecInfoFactory.__create_default()
         verification.mi_info = MiInfoFactory.create_from_csv_row(meter)
-        verification.vrf_date = XmlDate.from_string(RecInfoFactory.__format_date(meter[COL_VRF_DATE]))
+        verification.vrf_date = RecInfoFactory.__create_xmldate_from_string(meter[COL_VRF_DATE])
 
-        if RecInfoFactory.__date_is_valid(meter[COL_VALID_DATE]):
-            verification.valid_date = XmlDate.from_string(RecInfoFactory.__format_date(meter[COL_VALID_DATE]))
-            verification.applicable = verification.Applicable()
-            verification.applicable.sign_pass = verification.applicable.sign_mi = False
-        else:
+        try:
+            verification.valid_date = RecInfoFactory.__create_xmldate_from_string(meter[COL_VALID_DATE])
+        except:
             verification.inapplicable = verification.Inapplicable()
             verification.inapplicable.reasons = 'Не соответствует требованиям МП'
+        else:
+            verification.applicable = verification.Applicable()
+            verification.applicable.sign_pass = verification.applicable.sign_mi = False
 
         verification.metrologist = meter[COL_METROLOGIST]
         verification.means = MeansFactory.create_test(meter[COL_TEST_DEV_NUM])
@@ -45,10 +47,15 @@ class RecInfoFactory:
         return verification
     
     @staticmethod
-    def __format_date(string):
-        date = string.split('.')[::-1]
-        return '-'.join(date)
-
+    def __create_xmldate_from_string(string):
+        try:
+            date = datetime.strptime(string, '%d.%m.%Y').date()
+        except:
+            try:
+                date = datetime.strptime(string, '%d/%m/%Y').date()
+            except:
+                raise ValueError('Неверный формат даты.\nДопустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
+        return XmlDate.from_string(date.isoformat())
     @staticmethod
     def __date_is_valid(date):
         pass
