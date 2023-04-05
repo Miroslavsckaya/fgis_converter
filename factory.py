@@ -1,5 +1,6 @@
 import models.arshin as arshin
 from datetime import datetime
+import exceptions
 from xsdata.models.datatype import XmlDate
 
 COL_TYPE_NUM = 0
@@ -54,7 +55,7 @@ class RecInfoFactory:
             try:
                 date = datetime.strptime(string, '%d/%m/%Y').date()
             except:
-                raise ValueError('Неверный формат даты.\nДопустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
+                raise exceptions.DateError('Неверный формат даты.\nДопустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
         return XmlDate.from_string(date.isoformat())
 
 
