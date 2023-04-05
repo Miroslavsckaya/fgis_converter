@@ -56,9 +56,6 @@ class RecInfoFactory:
             except:
                 raise ValueError('Неверный формат даты.\nДопустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
         return XmlDate.from_string(date.isoformat())
-    @staticmethod
-    def __date_is_valid(date):
-        pass
 
 
 class MiInfoFactory:
