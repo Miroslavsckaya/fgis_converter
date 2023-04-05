@@ -4,7 +4,7 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 import factory
 
 
-def convert_csv_to_xml_file(input_filename, output_filename='application'):
+def convert_csv_to_xml_file(input_filename, output_filename):
     application = Application()
 
     with open(input_filename, 'r', encoding='Windows-1251') as file:
