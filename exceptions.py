@@ -1,16 +1,20 @@
-class FileDoesNotExistError(Exception):
+class FileError(Exception):
     pass
 
 
-class FileEncodingError(Exception):
+class FileDoesNotExistError(FileError):
     pass
 
 
-class FilePathError(Exception):
+class FileEncodingError(FileError):
     pass
 
 
-class FilePermissionError(Exception):
+class FilePathError(FileError):
+    pass
+
+
+class FilePermissionError(FileError):
     pass
 
 

@@ -22,9 +22,9 @@ def convert_csv_to_xml_file(input_filename, output_filename):
     try:
         file = open(input_filename, 'rb')
     except FileNotFoundError:
-        raise exceptions.FileDoesNotExistError(f'Файл не найден: {input_filename}')
+        raise exceptions.FileDoesNotExistError('Файл не найден:', input_filename)
     except PermissionError:
-        raise exceptions.FilePermissionError('Файл недоступен для чтения')
+        raise exceptions.FilePermissionError('Файл недоступен для чтения:', input_filename)
 
     encoding = detect_encoding(file)
     file.close()

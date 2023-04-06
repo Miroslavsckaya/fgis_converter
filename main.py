@@ -17,9 +17,9 @@ def convert(path_input, path_output, cli):
 
 
 def print_error(err, cli):
-    logging.error(str(err))
+    logging.error(err)
     if not cli:
-        sg.popup_error(str(err))
+        sg.popup_error(*err.args)
 
 
 parser = argparse.ArgumentParser()
@@ -39,7 +39,7 @@ if not is_cli:
     if url.scheme in ('file', ''):
         convert(url.path, args['path_output'], is_cli)
     else:
-        print_error(exceptions.FilePathError(f'Неподдерживаемая схема: {url.scheme }'), is_cli)
+        print_error(exceptions.FilePathError('Неподдерживаемая схема:', url.scheme), is_cli)
         exit(1)
 else:
     convert(args['path_input'], args['path_output'], is_cli)

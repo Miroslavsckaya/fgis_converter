@@ -55,7 +55,7 @@ class RecInfoFactory:
             try:
                 date = datetime.strptime(string, '%d/%m/%Y').date()
             except:
-                raise exceptions.DateError('Неверный формат даты.\nДопустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
+                raise exceptions.DateError('Неверный формат даты:', string,'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
         return XmlDate.from_string(date.isoformat())
 
 
