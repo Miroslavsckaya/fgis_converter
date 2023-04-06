@@ -24,14 +24,13 @@ def print_error(err: Exception, cli: bool) -> None:
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cli', action='store_true')
-parser.add_argument('path_input', default=None, nargs='?')
+parser.add_argument('path_input', default='', nargs='?')
 parser.add_argument('path_output', default='./application', nargs='?')
 args = vars(parser.parse_args())
 is_cli = args['cli']
 
 if not is_cli:
-    default_path = '' if args['path_input'] is None else args['path_input']
-    file_path = sg.popup_get_file('Выберите файл для конвертации', title='Аршин', keep_on_top=True, default_path=default_path, file_types=(("CSV Files","*.csv"),))
+    file_path = sg.popup_get_file('Выберите файл для конвертации', title='Аршин', keep_on_top=True, default_path=args['path_input'], file_types=(("CSV Files","*.csv"),))
     url = urlparse(file_path, allow_fragments=False)
     if not url.path:
         print_error(exceptions.FilePathError('Пустой путь'), is_cli)
