@@ -1,12 +1,13 @@
 import csv
 import exceptions
 import factory
+import io
 from chardet.universaldetector import UniversalDetector
 from models.arshin import Application
 from xsdata.formats.dataclass.serializers import XmlSerializer
 
 
-def detect_encoding(file):
+def detect_encoding(file: io.BytesIO) -> str:
     detector = UniversalDetector()
     for line in file:
         detector.feed(line)
@@ -16,7 +17,7 @@ def detect_encoding(file):
     return detector.result['encoding']
 
 
-def convert_csv_to_xml_file(input_filename, output_filename):
+def convert_csv_to_xml_file(input_filename: str, output_filename: str) -> None:
     application = Application()
 
     try:

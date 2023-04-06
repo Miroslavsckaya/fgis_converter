@@ -17,7 +17,7 @@ COL_PRESSURE = 9
 
 class RecInfoFactory:
     @staticmethod
-    def create_verification_from_csv_row(meter: list):
+    def create_verification_from_csv_row(meter: list[str]) -> arshin.RecInfo:
         verification = RecInfoFactory.__create_default()
         verification.mi_info = MiInfoFactory.create_from_csv_row(meter)
         verification.vrf_date = RecInfoFactory.__create_xmldate_from_string(meter[COL_VRF_DATE])
@@ -38,7 +38,7 @@ class RecInfoFactory:
         return verification
     
     @staticmethod
-    def __create_default():
+    def __create_default() -> arshin.RecInfo:
         verification = arshin.RecInfo()
         verification.sign_cipher = 'ДГХ'
         verification.mi_owner = 'ФИЗИЧЕСКОЕ ЛИЦО'
@@ -48,7 +48,7 @@ class RecInfoFactory:
         return verification
     
     @staticmethod
-    def __create_xmldate_from_string(string):
+    def __create_xmldate_from_string(string: str) -> XmlDate:
         try:
             date = datetime.strptime(string, '%d.%m.%Y').date()
         except:
@@ -61,7 +61,7 @@ class RecInfoFactory:
 
 class MiInfoFactory:
     @staticmethod
-    def create_from_csv_row(meter):
+    def create_from_csv_row(meter: list[str]) -> arshin.RecInfo.MiInfo:
         info = arshin.RecInfo.MiInfo()
         info.single_mi = info.SingleMi()
         info.single_mi.mitype_number = meter[COL_TYPE_NUM]
@@ -72,7 +72,7 @@ class MiInfoFactory:
 
 class MeansFactory:
     @staticmethod
-    def create_test(number):
+    def create_test(number: str) -> arshin.RecInfo.Means:
         test = arshin.RecInfo.Means()
         test.mieta = test.Mieta()
         test.mieta.number = number
@@ -81,7 +81,7 @@ class MeansFactory:
 
 class ConditionsFactory:
     @staticmethod
-    def create_conditions_from_csv_row(meter):
+    def create_conditions_from_csv_row(meter: list[str]) -> arshin.RecInfo.Conditions:
         conditions = arshin.RecInfo.Conditions()
         conditions.temperature = meter[COL_TEMPERATURE]
         conditions.hymidity = meter[COL_HUMIDITY]

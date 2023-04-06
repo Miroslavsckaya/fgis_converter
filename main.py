@@ -8,7 +8,7 @@ from sys import exit
 from urllib.parse import urlparse
 
 
-def convert(path_input, path_output, cli):
+def convert(path_input: str, path_output: str, cli: bool) -> None:
     try:
         convert_csv_to_xml_file(path_input, path_output)
     except Exception as err:
@@ -16,7 +16,7 @@ def convert(path_input, path_output, cli):
         exit(1)
 
 
-def print_error(err, cli):
+def print_error(err: Exception, cli: bool) -> None:
     logging.error(err)
     if not cli:
         sg.popup_error(*err.args)
