@@ -10,5 +10,9 @@ class FilePathError(Exception):
     pass
 
 
+class FilePermissionError(Exception):
+    pass
+
+
 class DateError(Exception):
     pass
