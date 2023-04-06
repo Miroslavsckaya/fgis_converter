@@ -31,6 +31,9 @@ is_cli = args['cli']
 
 if not is_cli:
     file_path = sg.popup_get_file('Выберите файл для конвертации', title='Аршин', keep_on_top=True, default_path=args['path_input'], file_types=(("CSV Files","*.csv"),))
+    if file_path is None:
+        exit()
+
     url = urlparse(file_path, allow_fragments=False)
     if not url.path:
         print_error(exceptions.FilePathError('Пустой путь'), is_cli)
