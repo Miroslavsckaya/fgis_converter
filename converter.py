@@ -1,20 +1,33 @@
 import csv
 import exceptions
+import factory
+from chardet.universaldetector import UniversalDetector
 from models.arshin import Application
 from xsdata.formats.dataclass.serializers import XmlSerializer
-import factory
+
+
+def detect_encoding(file):
+    detector = UniversalDetector()
+    for line in file:
+        detector.feed(line)
+        if detector.done:
+            break
+    detector.close()
+    return detector.result['encoding']
 
 
 def convert_csv_to_xml_file(input_filename, output_filename):
     application = Application()
 
     try:
-        file = open(input_filename, 'r', encoding='Windows-1251')
+        file = open(input_filename, 'rb')
     except FileNotFoundError:
         raise exceptions.FileDoesNotExistError(f'Файл не найден: {input_filename}')
-    except ValueError:
-        raise exceptions.FileEncodingError('Ошибка кодировки')
 
+    encoding = detect_encoding(file)
+    file.close()
+
+    file = open(input_filename, 'r', encoding=encoding)
     reader = csv.reader(file, delimiter=';')
     for row in reader:
         if all(string == '' for string in row):
