@@ -1,5 +1,5 @@
 import exceptions
-import models.arshin as arshin
+import arshin
 from datetime import datetime
 from data_sources.interface import VerificationData
 from typing import Generator

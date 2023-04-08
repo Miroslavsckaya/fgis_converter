@@ -1,13 +1,13 @@
 import csv
 import exceptions
 import factory
-import io
 from chardet.universaldetector import UniversalDetector
-from models.arshin import Application
+from arshin import Application
+from typing import BinaryIO
 from xsdata.formats.dataclass.serializers import XmlSerializer
 
 
-def detect_encoding(file: io.BytesIO) -> str:
+def detect_encoding(file: BinaryIO) -> str:
     detector = UniversalDetector()
     for line in file:
         detector.feed(line)

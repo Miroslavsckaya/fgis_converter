@@ -9,7 +9,7 @@ class BaseDataSource(DataSourceInterface):
         return self.__NAME
 
     @staticmethod
-    def check_permission_file(path: str) -> None:
+    def check_file_permissions(path: str) -> None:
         try:
             file = open(path, 'rb')
         except FileNotFoundError:
