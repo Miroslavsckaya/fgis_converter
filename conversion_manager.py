@@ -11,7 +11,7 @@ class ConversionManager:
 
     def convert(self, input_filename: str, output_filename: str, data_source: str) -> None:
         verifications = self.dispatcher.get_data_generator_by_source_name(data_source, input_filename)
-        application_xml = factory.ApplicationFactory(verifications)
+        application_xml = factory.ApplicationFactory.create_application(verifications)
         xml_string = self.serializer.render(application_xml)
         self.write_to_file(xml_string, output_filename)
 

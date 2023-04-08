@@ -1,6 +1,8 @@
+import exceptions
 import models.arshin as arshin
 from datetime import datetime
-import exceptions
+from data_sources.interface import VerificationData
+from typing import Generator
 from xsdata.models.datatype import XmlDate
 
 COL_TYPE_NUM = 0
@@ -13,6 +15,12 @@ COL_TEST_DEV_NUM = 6
 COL_TEMPERATURE = 7
 COL_HUMIDITY = 8
 COL_PRESSURE = 9
+
+
+class ApplicationFactory:
+    @staticmethod
+    def create_application(verifications: Generator[VerificationData, None, None]):
+        pass
 
 
 class RecInfoFactory:
