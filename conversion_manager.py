@@ -5,15 +5,15 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 
 
 class ConversionManager:
-    serializer = XmlSerializer()
+    def __init__(self, serializer: XmlSerializer) -> None:
+        self.serializer = serializer
 
-    @classmethod
-    def convert(cls, input_filename: str, output_filename: str, par: str) -> None:
-        data_source = cls.get_data_source(par)
+    def convert(self, input_filename: str, output_filename: str, par: str) -> None:
+        data_source = self.get_data_source(par)
         verification_dto = data_source.get_verfication_dto(input_filename)
         application_xml = factory.ApplicationFactory(verification_dto)
-        xml_string = cls.serializer.render(application_xml)
-        cls.write_to_output(xml_string, output_filename)
+        xml_string = self.serializer.render(application_xml)
+        self.write_to_output(xml_string, output_filename)
 
     @staticmethod
     def get_data_source(par: str) -> Any:
@@ -23,10 +23,10 @@ class ConversionManager:
         return data_source
 
     @staticmethod
-    def write_to_output(xml_str: str, output: str) -> None:
+    def write_to_file(xml_str: str, file_path: str) -> None:
         try:
-            file = open(output, 'w')
+            file = open(file_path, 'w')
         except PermissionError:
-            raise exceptions.FilePermissionError('Файл недоступен для записи', output)
+            raise exceptions.FilePermissionError('Файл недоступен для записи', file_path)
         file.write(xml_str)
         file.close()
