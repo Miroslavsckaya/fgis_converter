@@ -5,22 +5,15 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 
 
 class ConversionManager:
-    def __init__(self, serializer: XmlSerializer) -> None:
+    def __init__(self, serializer: XmlSerializer, dispatcher: data_sources.dispatcher.DataSourceDispatcher) -> None:
         self.serializer = serializer
+        self.dispatcher = dispatcher
 
-    def convert(self, input_filename: str, output_filename: str, par: str) -> None:
-        data_source = self.get_data_source(par)
-        verification_dto = data_source.get_verfication_dto(input_filename)
+    def convert(self, input_filename: str, output_filename: str, data_source: str) -> None:
+        verification_dto = self.dispatcher.get_data_generator_by_source_name(input_filename, data_source)
         application_xml = factory.ApplicationFactory(verification_dto)
         xml_string = self.serializer.render(application_xml)
         self.write_to_output(xml_string, output_filename)
-
-    @staticmethod
-    def get_data_source(par: str) -> Any:
-        data_source = None
-        if par == 'csv':
-            data_source = data_sources.csv.DataSourceScv
-        return data_source
 
     @staticmethod
     def write_to_file(xml_str: str, file_path: str) -> None:

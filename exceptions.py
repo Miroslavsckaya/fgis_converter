@@ -20,3 +20,11 @@ class FilePermissionError(FileError):
 
 class DateError(Exception):
     pass
+
+
+class DataSourceError(Exception):
+    pass
+
+
+class UnsupportedDataSourceError(DataSourceError):
+    pass
