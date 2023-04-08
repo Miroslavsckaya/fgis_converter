@@ -28,3 +28,7 @@ class DataSourceError(Exception):
 
 class UnsupportedDataSourceError(DataSourceError):
     pass
+
+
+class DataSourceInterfaceError(DataSourceError):
+    pass
