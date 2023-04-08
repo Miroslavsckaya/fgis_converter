@@ -19,7 +19,7 @@ COL_PRESSURE = 9
 
 class ApplicationFactory:
     @staticmethod
-    def create_application(verifications: Generator[VerificationData, None, None]):
+    def create_application(verifications: Generator[VerificationData, None, None]) -> arshin.Application:
         pass
 
 

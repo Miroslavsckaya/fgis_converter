@@ -5,11 +5,11 @@ from data_sources.interface import DataSourceInterface
 class BaseDataSource(DataSourceInterface):
     __NAME = 'Base data source class'
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self.__NAME
 
     @staticmethod
-    def check_permission_file(path):
+    def check_permission_file(path: str) -> None:
         try:
             file = open(path, 'rb')
         except FileNotFoundError:
