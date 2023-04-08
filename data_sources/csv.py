@@ -1,5 +1,5 @@
 from data_sources.interface import DataSourceInterface
 
 
-class DataSourceCsv(DataSourceInterface):
+class CsvDataSource(DataSourceInterface):
     pass

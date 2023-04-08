@@ -1,15 +1,15 @@
 import exceptions
 from data_sources.interface import VerificationData, DataSourceInterface
-from typing import Any, Generator
+from typing import Generator
 
 
 class DataSourceDispatcher:
-    def __init__(self, *args: Any) -> None:
-        self.__sources: dict[Any] = {}
+    def __init__(self, *args: DataSourceInterface) -> None:
+        self.__sources: dict[DataSourceInterface] = {}
         for source in args:
             self.register_source(source)
 
-    def register_source(self, source: Any) -> None:
+    def register_source(self, source: DataSourceInterface) -> None:
         if not isinstance(source, DataSourceInterface):
             raise exceptions.DataSourceInterfaceError('Only DataSourceInterface implementations are supported')
         self.__sources[source.get_name()] = source
