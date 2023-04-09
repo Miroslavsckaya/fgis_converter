@@ -11,7 +11,6 @@ class DataSourceInterface(ABC):
     def get_name(self) -> str:
         pass
 
-    @staticmethod
     @abstractmethod
-    def get_verification_generator(file_path: str) -> Generator[VerificationData, None, None]:
+    def get_verification_generator(self, file_path: str) -> Generator[VerificationData, None, None]:
         pass
