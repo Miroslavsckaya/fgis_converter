@@ -32,3 +32,11 @@ class UnsupportedDataSourceError(DataSourceError):
 
 class DataSourceInterfaceError(DataSourceError):
     pass
+
+
+class VerificationDataError(Exception):
+    pass
+
+
+class VerificationKeyError(VerificationDataError):
+    pass
