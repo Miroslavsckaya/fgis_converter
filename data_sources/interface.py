@@ -2,16 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Generator
 
 
-class DataSourceInterface(ABC):
-    @abstractmethod
-    def get_name(self) -> str:
-        pass
-
-    @abstractmethod
-    def get_verification_generator(self, file_path: str) -> Generator[VerificationData, None, None]:
-        pass
-
-
 class VerificationData:
     def __init__(self, reg_num: str, factory_num: str, modification: str, ver_date: str,
                  valid_date: str, metrologist: str, test_dev_num: str, pressure: str,
@@ -66,3 +56,13 @@ class VerificationData:
     @property
     def humidity(self):
         return self.__humidity
+
+
+class DataSourceInterface(ABC):
+    @abstractmethod
+    def get_name(self) -> str:
+        pass
+
+    @abstractmethod
+    def get_verification_generator(self, file_path: str) -> Generator[VerificationData, None, None]:
+        pass
