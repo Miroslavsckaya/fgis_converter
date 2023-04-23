@@ -6,7 +6,7 @@ from typing import Generator
 
 
 class CsvDataSource(BaseDataSource):
-    def __init__(self, delimiter=';') -> None:
+    def __init__(self, delimiter: str = ';') -> None:
         self.__NAME = 'csv'
         self.__delimiter = delimiter
 
@@ -14,7 +14,10 @@ class CsvDataSource(BaseDataSource):
         file = self.open_file(file_path, 'r')
         reader = csv.reader(file, delimiter=self.__delimiter)
         for row in reader:
-            yield self.convert_to_verification_data(row, reader.line_num)
+            verification_data = self.convert_to_verification_data(row, reader.line_num)
+            if verification_data is None:
+                continue
+            yield verification_data
         file.close()
 
     @staticmethod

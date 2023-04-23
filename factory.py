@@ -5,35 +5,22 @@ from data_sources.interface import VerificationData
 from typing import Generator
 from xsdata.models.datatype import XmlDate
 
-COL_TYPE_NUM = 0
-COL_MANUFACTURE_NUM = 1
-COL_MODIFICATION = 2
-COL_VRF_DATE = 3
-COL_VALID_DATE = 4
-COL_METROLOGIST = 5
-COL_TEST_DEV_NUM = 6
-COL_TEMPERATURE = 7
-COL_HUMIDITY = 8
-COL_PRESSURE = 9
-
 
 class ApplicationFactory:
     @staticmethod
     def create_application(verifications_data: Generator[VerificationData, None, None]) -> arshin.Application:
         application = arshin.Application()
         for verification_data in verifications_data:
-            if verification_data is None:
-                continue
-            application.result.append(RecInfoFactory(verification_data))
+            application.result.append(RecInfoFactory.create_verification_from_verification_data(verification_data))
         return application
 
 
 class RecInfoFactory:
     @staticmethod
-    def create_verification_from_csv_row(verification_data: VerificationData) -> arshin.RecInfo:
+    def create_verification_from_verification_data(verification_data: VerificationData) -> arshin.RecInfo:
         verification = RecInfoFactory.__create_default()
         verification.mi_info = MiInfoFactory.create_from_verification_data(verification_data)
-        verification.vrf_date = RecInfoFactory.__create_xmldate_from_string(verification_data)
+        verification.vrf_date = RecInfoFactory.__create_xmldate_from_string(verification_data.ver_date)
 
         try:
             verification.valid_date = RecInfoFactory.__create_xmldate_from_string(verification_data.valid_date)

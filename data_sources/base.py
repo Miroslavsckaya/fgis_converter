@@ -5,7 +5,7 @@ from typing import BinaryIO, IO
 
 
 class BaseDataSource(DataSourceInterface):
-    __NAME: str = 'Base_data_source_class'
+    __NAME: str = 'base_data_source_class'
 
     def get_name(self) -> str:
         return self.__NAME

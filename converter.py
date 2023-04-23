@@ -35,7 +35,7 @@ def convert_csv_to_xml_file(input_filename: str, output_filename: str) -> None:
     for row in reader:
         if all(string == '' for string in row):
             continue
-        verification = factory.RecInfoFactory.create_verification_from_csv_row(row)
+        verification = factory.RecInfoFactory.create_verification_from_verification_data(row)
         application.result.append(verification)
     file.close()
 
