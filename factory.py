@@ -11,13 +11,13 @@ class ApplicationFactory:
     def create_application(verifications_data: Generator[VerificationData, None, None]) -> arshin.Application:
         application = arshin.Application()
         for verification_data in verifications_data:
-            application.result.append(RecInfoFactory.create_verification_from_verification_data(verification_data))
+            application.result.append(RecInfoFactory.create_from_verification_data(verification_data))
         return application
 
 
 class RecInfoFactory:
     @staticmethod
-    def create_verification_from_verification_data(verification_data: VerificationData) -> arshin.RecInfo:
+    def create_from_verification_data(verification_data: VerificationData) -> arshin.RecInfo:
         verification = RecInfoFactory.__create_default()
         verification.mi_info = MiInfoFactory.create_from_verification_data(verification_data)
         verification.vrf_date = RecInfoFactory.__create_xmldate_from_string(verification_data.ver_date)
@@ -33,7 +33,7 @@ class RecInfoFactory:
 
         verification.metrologist = verification_data.metrologist
         verification.means = MeansFactory.create_test(verification_data.test_dev_num)
-        verification.conditions = ConditionsFactory.create_conditions_from_verification_data(verification_data)
+        verification.conditions = ConditionsFactory.create_from_verification_data(verification_data)
 
         return verification
     
@@ -81,7 +81,7 @@ class MeansFactory:
 
 class ConditionsFactory:
     @staticmethod
-    def create_conditions_from_verification_data(verification_data: VerificationData) -> arshin.RecInfo.Conditions:
+    def create_from_verification_data(verification_data: VerificationData) -> arshin.RecInfo.Conditions:
         conditions = arshin.RecInfo.Conditions()
         conditions.temperature = verification_data.temperature
         conditions.hymidity = verification_data.humidity

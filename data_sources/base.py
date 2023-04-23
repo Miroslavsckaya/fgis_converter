@@ -5,8 +5,6 @@ from typing import BinaryIO, IO
 
 
 class BaseDataSource(DataSourceInterface):
-    __NAME: str = 'base_data_source_class'
-
     def open_file(self, path: str, mode: str) -> IO:
         try:
             file = open(path, 'rb')
