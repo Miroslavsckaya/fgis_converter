@@ -10,6 +10,9 @@ class CsvDataSource(BaseDataSource):
         self.__NAME = 'csv'
         self.__delimiter = delimiter
 
+    def get_name(self) -> str:
+        return self.__NAME
+
     def get_verification_generator(self, file_path: str) -> Generator[VerificationData, None, None]:
         file = self.open_file(file_path, 'r')
         reader = csv.reader(file, delimiter=self.__delimiter)
