@@ -5,11 +5,11 @@ from typing import Generator
 
 
 class CsvDataSource(BaseDataSource):
-    def __init__(self, delimiter: str) -> None:
+    def __init__(self, delimiter=';') -> None:
         self.__NAME = 'csv'
         self.__delimiter = delimiter
 
-    def get_verification_generator(self, file_path: str, ) -> Generator[VerificationData, None, None]:
+    def get_verification_generator(self, file_path: str) -> Generator[VerificationData, None, None]:
         file = self.open_file(file_path, 'r')
         reader = csv.reader(file, delimiter=self.__delimiter)
         for row in reader:

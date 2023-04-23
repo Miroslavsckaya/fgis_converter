@@ -11,7 +11,7 @@ class DataSourceDispatcher:
 
     def register_source(self, source: DataSourceInterface) -> None:
         if not isinstance(source, DataSourceInterface):
-            raise exceptions.DataSourceInterfaceError('Only DataSourceInterface implementations are supported')
+            raise exceptions.DataSourceError('Only DataSourceInterface implementations are supported')
         self.__sources[source.get_name()] = source
 
     def get_data_generator_by_source_name(self, data_source: str, file_path: str) -> Generator[VerificationData, None, None]:

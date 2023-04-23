@@ -4,8 +4,8 @@ from typing import Generator
 
 class VerificationData:
     def __init__(self, reg_num: str, factory_num: str, modification: str, ver_date: str,
-                 valid_date: str, metrologist: str, test_dev_num: str, pressure: str,
-                 temperature: str, humidity: str) -> None:
+                 valid_date: str, metrologist: str, test_dev_num: str, temperature: str,
+                 pressure: str, humidity: str) -> None:
         self.__reg_num: str = reg_num
         self.__factory_num: str = factory_num
         self.__modification: str = modification
@@ -13,8 +13,8 @@ class VerificationData:
         self.__valid_date: str = valid_date
         self.__metrologist: str = metrologist
         self.__test_dev_num: str = test_dev_num
-        self.__pressure: str = pressure
         self.__temperature: str = temperature
+        self.__pressure: str = pressure
         self.__humidity: str = humidity
 
     @property
@@ -26,7 +26,7 @@ class VerificationData:
         return self.__factory_num
 
     @property
-    def modification (self):
+    def modification(self):
         return self.__modification
 
     @property

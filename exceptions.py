@@ -30,10 +30,6 @@ class UnsupportedDataSourceError(DataSourceError):
     pass
 
 
-class DataSourceInterfaceError(DataSourceError):
-    pass
-
-
 class VerificationDataError(Exception):
     pass
 

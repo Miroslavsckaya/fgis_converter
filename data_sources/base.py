@@ -5,7 +5,7 @@ from typing import BinaryIO, IO
 
 
 class BaseDataSource(DataSourceInterface):
-    __NAME = 'Base data source class'
+    __NAME: str = 'Base_data_source_class'
 
     def get_name(self) -> str:
         return self.__NAME
@@ -30,3 +30,4 @@ class BaseDataSource(DataSourceInterface):
                 break
         detector.close()
         return detector.result['encoding']
+
