@@ -19,19 +19,24 @@ COL_PRESSURE = 9
 
 class ApplicationFactory:
     @staticmethod
-    def create_application(verifications: Generator[VerificationData, None, None]) -> arshin.Application:
-        pass
+    def create_application(verifications_data: Generator[VerificationData, None, None]) -> arshin.Application:
+        application = arshin.Application()
+        for verification_data in verifications_data:
+            if verification_data is None:
+                continue
+            application.result.append(RecInfoFactory(verification_data))
+        return application
 
 
 class RecInfoFactory:
     @staticmethod
-    def create_verification_from_csv_row(meter: list[str]) -> arshin.RecInfo:
+    def create_verification_from_csv_row(verification_data: VerificationData) -> arshin.RecInfo:
         verification = RecInfoFactory.__create_default()
-        verification.mi_info = MiInfoFactory.create_from_csv_row(meter)
-        verification.vrf_date = RecInfoFactory.__create_xmldate_from_string(meter[COL_VRF_DATE])
+        verification.mi_info = MiInfoFactory.create_from_verification_data(verification_data)
+        verification.vrf_date = RecInfoFactory.__create_xmldate_from_string(verification_data)
 
         try:
-            verification.valid_date = RecInfoFactory.__create_xmldate_from_string(meter[COL_VALID_DATE])
+            verification.valid_date = RecInfoFactory.__create_xmldate_from_string(verification_data.valid_date)
         except:
             verification.inapplicable = verification.Inapplicable()
             verification.inapplicable.reasons = 'Не соответствует требованиям МП'
@@ -39,9 +44,9 @@ class RecInfoFactory:
             verification.applicable = verification.Applicable()
             verification.applicable.sign_pass = verification.applicable.sign_mi = False
 
-        verification.metrologist = meter[COL_METROLOGIST]
-        verification.means = MeansFactory.create_test(meter[COL_TEST_DEV_NUM])
-        verification.conditions = ConditionsFactory.create_conditions_from_csv_row(meter)
+        verification.metrologist = verification_data.metrologist
+        verification.means = MeansFactory.create_test(verification_data.test_dev_num)
+        verification.conditions = ConditionsFactory.create_conditions_from_verification_data(verification_data)
 
         return verification
     
@@ -69,12 +74,12 @@ class RecInfoFactory:
 
 class MiInfoFactory:
     @staticmethod
-    def create_from_csv_row(meter: list[str]) -> arshin.RecInfo.MiInfo:
+    def create_from_verification_data(verification_data: VerificationData) -> arshin.RecInfo.MiInfo:
         info = arshin.RecInfo.MiInfo()
         info.single_mi = info.SingleMi()
-        info.single_mi.mitype_number = meter[COL_TYPE_NUM]
-        info.single_mi.manufacture_num = meter[COL_MANUFACTURE_NUM]
-        info.single_mi.modification = meter[COL_MODIFICATION]
+        info.single_mi.mitype_number = verification_data.reg_num
+        info.single_mi.manufacture_num = verification_data.factory_num
+        info.single_mi.modification = verification_data.modification
         return info
 
 
@@ -89,9 +94,9 @@ class MeansFactory:
 
 class ConditionsFactory:
     @staticmethod
-    def create_conditions_from_csv_row(meter: list[str]) -> arshin.RecInfo.Conditions:
+    def create_conditions_from_verification_data(verification_data: VerificationData) -> arshin.RecInfo.Conditions:
         conditions = arshin.RecInfo.Conditions()
-        conditions.temperature = meter[COL_TEMPERATURE]
-        conditions.hymidity = meter[COL_HUMIDITY]
-        conditions.pressure = meter[COL_PRESSURE]
+        conditions.temperature = verification_data.temperature
+        conditions.hymidity = verification_data.humidity
+        conditions.pressure = verification_data.pressure
         return conditions
