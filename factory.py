@@ -1,6 +1,6 @@
-import exceptions
 import arshin
-from datetime import datetime
+import datetime
+import exceptions
 from data_sources.interface import VerificationData
 from typing import Generator
 from xsdata.models.datatype import XmlDate
@@ -28,6 +28,7 @@ class RecInfoFactory:
             verification.inapplicable = verification.Inapplicable()
             verification.inapplicable.reasons = 'Не соответствует требованиям МП'
         else:
+            verification.valid_date = RecInfoFactory.__previous_day(verification.vrf_date, verification.valid_date)
             verification.applicable = verification.Applicable()
             verification.applicable.sign_pass = verification.applicable.sign_mi = False
 
@@ -46,17 +47,23 @@ class RecInfoFactory:
         verification.calibration = False
         verification.doc_title = 'МИ 1592-2015'
         return verification
-    
+
     @staticmethod
     def __create_xmldate_from_string(string: str) -> XmlDate:
         try:
-            date = datetime.strptime(string, '%d.%m.%Y').date()
+            date = datetime.datetime.strptime(string, '%d.%m.%Y').date()
         except:
             try:
-                date = datetime.strptime(string, '%d/%m/%Y').date()
+                date = datetime.datetime.strptime(string, '%d/%m/%Y').date()
             except:
                 raise exceptions.DateError('Неверный формат даты:', string,'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
-        return XmlDate.from_string(date.isoformat())
+        return XmlDate.from_date(date)
+
+    @staticmethod
+    def __previous_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:
+        valid_date = datetime.date(valid_date.year, vrf_date.month, vrf_date.day)
+        timedelta = datetime.timedelta(1)
+        return XmlDate.from_date(valid_date - timedelta)
 
 
 class MiInfoFactory:
