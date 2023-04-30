@@ -1,7 +1,7 @@
 import arshin
-import datetime
 import exceptions
 from data_sources.interface import VerificationData
+from datetime import datetime, date, timedelta
 from typing import Generator
 from xsdata.models.datatype import XmlDate
 
@@ -51,19 +51,19 @@ class RecInfoFactory:
     @staticmethod
     def __create_xmldate_from_string(string: str) -> XmlDate:
         try:
-            date = datetime.datetime.strptime(string, '%d.%m.%Y').date()
+            date = datetime.strptime(string, '%d.%m.%Y').date()
         except:
             try:
-                date = datetime.datetime.strptime(string, '%d/%m/%Y').date()
+                date = datetime.strptime(string, '%d/%m/%Y').date()
             except:
-                raise exceptions.DateError('Неверный формат даты:', string,'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
+                raise exceptions.DateError('Неверный формат даты:', string, 'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
         return XmlDate.from_date(date)
 
     @staticmethod
     def __previous_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:
-        valid_date = datetime.date(valid_date.year, vrf_date.month, vrf_date.day)
-        timedelta = datetime.timedelta(1)
-        return XmlDate.from_date(valid_date - timedelta)
+        valid_date = date(valid_date.year, vrf_date.month, vrf_date.day)
+        delta = timedelta(1)
+        return XmlDate.from_date(valid_date - delta)
 
 
 class MiInfoFactory:
