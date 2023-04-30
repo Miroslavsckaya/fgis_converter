@@ -13,10 +13,10 @@ class ConversionManager:
         verifications = self.dispatcher.get_data_generator_by_source_name(data_source, input_filename)
         application = factory.ApplicationFactory.create_application(verifications)
         xml_string = self.serializer.render(application)
-        self.write_to_file(xml_string, output_filename)
+        self.__write_to_file(xml_string, output_filename)
 
     @staticmethod
-    def write_to_file(xml: str, file_path: str) -> None:
+    def __write_to_file(xml: str, file_path: str) -> None:
         try:
             file = open(file_path, 'w')
         except PermissionError:
