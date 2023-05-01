@@ -63,7 +63,7 @@ class RecInfoFactory:
     @staticmethod
     def __previous_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:
         valid_date = date(valid_date.year, vrf_date.month, vrf_date.day)
-        delta = timedelta(1)
+        delta = timedelta(days=1)
         return XmlDate.from_date(valid_date - delta)
 
 
