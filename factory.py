@@ -6,6 +6,9 @@ from typing import Generator
 from xsdata.models.datatype import XmlDate
 
 
+LAST_VALID_DAY_INTERVAL = 1
+
+
 class ApplicationFactory:
     @staticmethod
     def create_application(verifications_data: Generator[VerificationData, None, None]) -> arshin.Application:
@@ -63,7 +66,7 @@ class RecInfoFactory:
     @staticmethod
     def __last_valid_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:
         valid_date = date(valid_date.year, vrf_date.month, vrf_date.day)
-        delta = timedelta(days=1)
+        delta = timedelta(days=LAST_VALID_DAY_INTERVAL)
         return XmlDate.from_date(valid_date - delta)
 
 
