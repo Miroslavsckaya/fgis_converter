@@ -5,7 +5,7 @@ from typing import Generator
 
 class DataSourceDispatcher:
     def __init__(self, *args: DataSourceInterface) -> None:
-        self.__sources: dict[DataSourceInterface] = {}
+        self.__sources: dict[str, DataSourceInterface] = {}
         for source in args:
             self.register_source(source)
 
