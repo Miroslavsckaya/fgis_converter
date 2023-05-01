@@ -28,7 +28,7 @@ class RecInfoFactory:
             verification.inapplicable = verification.Inapplicable()
             verification.inapplicable.reasons = 'Не соответствует требованиям МП'
         else:
-            verification.valid_date = RecInfoFactory.__previous_day(verification.vrf_date, verification.valid_date)
+            verification.valid_date = RecInfoFactory.__last_valid_day(verification.vrf_date, verification.valid_date)
             verification.applicable = verification.Applicable()
             verification.applicable.sign_pass = verification.applicable.sign_mi = False
 
@@ -61,7 +61,7 @@ class RecInfoFactory:
         return XmlDate.from_date(meter_date)
 
     @staticmethod
-    def __previous_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:
+    def __last_valid_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:
         valid_date = date(valid_date.year, vrf_date.month, vrf_date.day)
         delta = timedelta(days=1)
         return XmlDate.from_date(valid_date - delta)
