@@ -1,11 +1,11 @@
 import csv
 import logging
 from data_sources.base import BaseDataSource
-from data_sources.interface import VerificationData
+from data_sources.interface import DataSourceInterface, VerificationData
 from typing import Generator
 
 
-class CsvDataSource(BaseDataSource):
+class CsvDataSource(BaseDataSource, DataSourceInterface):
     def __init__(self, delimiter: str = ';') -> None:
         self.__delimiter: str = delimiter
 

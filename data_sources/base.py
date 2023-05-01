@@ -1,10 +1,9 @@
 import exceptions
 from chardet.universaldetector import UniversalDetector
-from data_sources.interface import DataSourceInterface
 from typing import BinaryIO, IO
 
 
-class BaseDataSource(DataSourceInterface):
+class BaseDataSource:
     def _open_file(self, path: str, mode: str) -> IO:
         try:
             file = open(path, 'rb')
@@ -25,4 +24,3 @@ class BaseDataSource(DataSourceInterface):
                 break
         detector.close()
         return detector.result['encoding']
-

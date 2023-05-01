@@ -24,7 +24,7 @@ class RecInfoFactory:
 
         try:
             verification.valid_date = RecInfoFactory.__create_xmldate_from_string(verification_data.valid_date)
-        except:
+        except exceptions.DateError:
             verification.inapplicable = verification.Inapplicable()
             verification.inapplicable.reasons = 'Не соответствует требованиям МП'
         else:
@@ -51,13 +51,14 @@ class RecInfoFactory:
     @staticmethod
     def __create_xmldate_from_string(string: str) -> XmlDate:
         try:
-            date = datetime.strptime(string, '%d.%m.%Y').date()
-        except:
+            meter_date = datetime.strptime(string, '%d.%m.%Y').date()
+        except ValueError:
             try:
-                date = datetime.strptime(string, '%d/%m/%Y').date()
-            except:
-                raise exceptions.DateError('Неверный формат даты:', string, 'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
-        return XmlDate.from_date(date)
+                meter_date = datetime.strptime(string, '%d/%m/%Y').date()
+            except ValueError:
+                raise exceptions.DateError('Неверный формат даты:', string,
+                                           'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
+        return XmlDate.from_date(meter_date)
 
     @staticmethod
     def __previous_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:

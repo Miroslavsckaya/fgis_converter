@@ -11,9 +11,10 @@ from urllib.parse import urlparse
 from xsdata.formats.dataclass.serializers import XmlSerializer
 
 
-def convert(path_input: str, path_output: str, conversion_manager: ConversionManager, data_source: str, cli: bool) -> None:
+def convert(path_input: str, path_output: str, manager: ConversionManager,
+            data_source: str, cli: bool) -> None:
     try:
-        conversion_manager.convert(path_input, path_output, data_source)
+        manager.convert(path_input, path_output, data_source)
     except Exception as err:
         print_error(err, cli)
         exit(1)
