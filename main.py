@@ -9,6 +9,7 @@ from data_sources.dispatcher import DataSourceDispatcher
 from sys import exit
 from urllib.parse import urlparse
 from xsdata.formats.dataclass.serializers import XmlSerializer
+from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 
 def convert(path_input: str, path_output: str, manager: ConversionManager,
@@ -27,7 +28,8 @@ def print_error(err: Exception, cli: bool) -> None:
 
 
 dispatcher = DataSourceDispatcher(CsvDataSource())
-xml_serializer = XmlSerializer()
+serializer_config = SerializerConfig(pretty_print=True)
+xml_serializer = XmlSerializer(config=serializer_config)
 conversion_manager = ConversionManager(xml_serializer, dispatcher)
 
 parser = argparse.ArgumentParser()
