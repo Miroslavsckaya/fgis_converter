@@ -3,7 +3,7 @@ from chardet.universaldetector import UniversalDetector
 from typing import BinaryIO, IO
 
 
-class BaseDataSource:
+class BaseFileDataSource:
     def _open_file(self, path: str, mode: str) -> IO:
         try:
             file = open(path, 'rb')
