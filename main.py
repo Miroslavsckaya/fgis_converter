@@ -27,6 +27,12 @@ def print_error(err: Exception, cli: bool) -> None:
         sg.popup_error(*err.args)
 
 
+def get_path_output(path_input: str, path_output: str | None) -> str:
+    if path_output is None:
+        return path_input + '.xml'
+    return path_output
+
+
 dispatcher = DataSourceDispatcher(CsvDataSource())
 serializer_config = SerializerConfig(pretty_print=True)
 xml_serializer = XmlSerializer(config=serializer_config)
@@ -35,24 +41,26 @@ conversion_manager = ConversionManager(xml_serializer, dispatcher)
 parser = argparse.ArgumentParser()
 parser.add_argument('--cli', action='store_true')
 parser.add_argument('path_input', default='', nargs='?')
-parser.add_argument('path_output', default='./application.xml', nargs='?')
+parser.add_argument('path_output', nargs='?')
 args = vars(parser.parse_args())
 is_cli = args['cli']
 
 if not is_cli:
-    file_path = sg.popup_get_file('Выберите файл для конвертации', title='Аршин', keep_on_top=True,
-                                  default_path=args['path_input'], file_types=(("CSV Files", "*.csv"),))
-    if file_path is None:
+    path_input = sg.popup_get_file('Выберите файл для конвертации', title='Аршин', keep_on_top=True,
+                                   default_path=args['path_input'], file_types=(("CSV Files", "*.csv"),))
+    if path_input is None:
         exit()
 
-    url = urlparse(file_path, allow_fragments=False)
+    url = urlparse(path_input, allow_fragments=False)
     if not url.path:
         print_error(exceptions.FilePathError('Пустой путь'), is_cli)
         exit(1)
     if url.scheme in ('file', ''):
-        convert(url.path, args['path_output'], conversion_manager, 'csv', is_cli)
+        path_output = get_path_output(url.path, args['path_output'])
+        convert(url.path, path_output, conversion_manager, 'csv', is_cli)
     else:
         print_error(exceptions.FilePathError('Неподдерживаемая схема:', url.scheme), is_cli)
         exit(1)
 else:
-    convert(args['path_input'], args['path_output'], conversion_manager, 'csv', is_cli)
+    path_output = get_path_output(args['path_input'], args['path_output'])
+    convert(args['path_input'], path_output, conversion_manager, 'csv', is_cli)
