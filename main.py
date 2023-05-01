@@ -12,10 +12,10 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 
-def convert(path_input: str, path_output: str, manager: ConversionManager,
+def convert(input_path: str, output_path: str, manager: ConversionManager,
             data_source: str, cli: bool) -> None:
     try:
-        manager.convert(path_input, path_output, data_source)
+        manager.convert(input_path, output_path, data_source)
     except Exception as err:
         print_error(err, cli)
         exit(1)
@@ -27,10 +27,10 @@ def print_error(err: Exception, cli: bool) -> None:
         sg.popup_error(*err.args)
 
 
-def get_path_output(path_input: str, path_output: str | None) -> str:
-    if path_output is None:
-        return path_input + '.xml'
-    return path_output
+def get_output_path(input_path: str, output_path: str | None) -> str:
+    if output_path is None:
+        return input_path + '.xml'
+    return output_path
 
 
 dispatcher = DataSourceDispatcher(CsvDataSource())
@@ -40,27 +40,27 @@ conversion_manager = ConversionManager(xml_serializer, dispatcher)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cli', action='store_true')
-parser.add_argument('path_input', default='', nargs='?')
-parser.add_argument('path_output', nargs='?')
+parser.add_argument('input_path', default='', nargs='?')
+parser.add_argument('output_path', nargs='?')
 args = vars(parser.parse_args())
 is_cli = args['cli']
 
 if not is_cli:
-    path_input = sg.popup_get_file('Выберите файл для конвертации', title='Аршин', keep_on_top=True,
-                                   default_path=args['path_input'], file_types=(("CSV Files", "*.csv"),))
-    if path_input is None:
+    input_path = sg.popup_get_file('Выберите файл для конвертации', title='Аршин', keep_on_top=True,
+                                   default_path=args['input_path'], file_types=(("CSV Files", "*.csv"),))
+    if input_path is None:
         exit()
 
-    url = urlparse(path_input, allow_fragments=False)
+    url = urlparse(input_path, allow_fragments=False)
     if not url.path:
         print_error(exceptions.FilePathError('Пустой путь'), is_cli)
         exit(1)
     if url.scheme in ('file', ''):
-        path_output = get_path_output(url.path, args['path_output'])
-        convert(url.path, path_output, conversion_manager, 'csv', is_cli)
+        output_path = get_output_path(url.path, args['output_path'])
+        convert(url.path, output_path, conversion_manager, 'csv', is_cli)
     else:
         print_error(exceptions.FilePathError('Неподдерживаемая схема:', url.scheme), is_cli)
         exit(1)
 else:
-    path_output = get_path_output(args['path_input'], args['path_output'])
-    convert(args['path_input'], path_output, conversion_manager, 'csv', is_cli)
+    output_path = get_output_path(args['input_path'], args['output_path'])
+    convert(args['input_path'], output_path, conversion_manager, 'csv', is_cli)
