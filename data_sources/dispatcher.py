@@ -5,7 +5,7 @@ from typing import Generator
 
 class DataSourceDispatcher:
     def __init__(self, *args: DataSourceInterface) -> None:
-        self.__sources: dict[DataSourceInterface] = {}
+        self.__sources: dict[str, DataSourceInterface] = {}
         for source in args:
             self.register_source(source)
 
@@ -14,7 +14,8 @@ class DataSourceDispatcher:
             raise exceptions.DataSourceError('Only DataSourceInterface implementations are supported')
         self.__sources[source.get_name()] = source
 
-    def get_data_generator_by_source_name(self, data_source: str, file_path: str) -> Generator[VerificationData, None, None]:
+    def get_data_generator_by_source_name(self, data_source: str, file_path: str) \
+            -> Generator[VerificationData, None, None]:
         if data_source not in self.__sources:
             raise exceptions.UnsupportedDataSourceError('Источник данных не поддерживается', data_source,
                                                         'Поддерживаемые источники:', *self.__sources)

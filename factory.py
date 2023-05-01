@@ -1,9 +1,12 @@
-import exceptions
 import arshin
-from datetime import datetime
+import exceptions
 from data_sources.interface import VerificationData
+from datetime import datetime, date, timedelta
 from typing import Generator
 from xsdata.models.datatype import XmlDate
+
+
+LAST_VALID_DAY_INTERVAL = 1
 
 
 class ApplicationFactory:
@@ -24,10 +27,11 @@ class RecInfoFactory:
 
         try:
             verification.valid_date = RecInfoFactory.__create_xmldate_from_string(verification_data.valid_date)
-        except:
+        except exceptions.DateError:
             verification.inapplicable = verification.Inapplicable()
             verification.inapplicable.reasons = 'Не соответствует требованиям МП'
         else:
+            verification.valid_date = RecInfoFactory.__last_valid_day(verification.vrf_date, verification.valid_date)
             verification.applicable = verification.Applicable()
             verification.applicable.sign_pass = verification.applicable.sign_mi = False
 
@@ -46,17 +50,24 @@ class RecInfoFactory:
         verification.calibration = False
         verification.doc_title = 'МИ 1592-2015'
         return verification
-    
+
     @staticmethod
     def __create_xmldate_from_string(string: str) -> XmlDate:
         try:
-            date = datetime.strptime(string, '%d.%m.%Y').date()
-        except:
+            meter_date = datetime.strptime(string, '%d.%m.%Y').date()
+        except ValueError:
             try:
-                date = datetime.strptime(string, '%d/%m/%Y').date()
-            except:
-                raise exceptions.DateError('Неверный формат даты:', string,'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
-        return XmlDate.from_string(date.isoformat())
+                meter_date = datetime.strptime(string, '%d/%m/%Y').date()
+            except ValueError:
+                raise exceptions.DateError('Неверный формат даты:', string,
+                                           'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
+        return XmlDate.from_date(meter_date)
+
+    @staticmethod
+    def __last_valid_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:
+        valid_date = date(valid_date.year, vrf_date.month, vrf_date.day)
+        delta = timedelta(days=LAST_VALID_DAY_INTERVAL)
+        return XmlDate.from_date(valid_date - delta)
 
 
 class MiInfoFactory:
