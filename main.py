@@ -1,11 +1,11 @@
 #! python
-import gui
 import argparse
-import exceptions
+import gui
 import logging
 from conversion_manager import ConversionManager
 from data_sources.csv import CsvDataSource
 from data_sources.dispatcher import DataSourceDispatcher
+from path_helper import PathHelper
 from sys import exit
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
@@ -22,13 +22,11 @@ def convert(input_path: str, output_path: str, manager: ConversionManager,
 
 def print_error(err: Exception, cli: bool) -> None:
     logging.error(err)
-    if not cli:
-        sg.popup_error(*err.args)
 
 
 def get_output_path(input_path: str | None, output_path: str | None) -> str:
     if output_path is None:
-        return input_path + '.xml'
+        return PathHelper.change_suffix(input_path)
     return output_path
 
 

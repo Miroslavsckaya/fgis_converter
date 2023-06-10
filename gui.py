@@ -1,7 +1,7 @@
+from conversion_manager import ConversionManager
+from path_helper import PathHelper
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
-
-from conversion_manager import ConversionManager
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, \
     QWidget, QFileDialog, QMessageBox
 
@@ -25,6 +25,7 @@ class MainWindow(QMainWindow):
         start_button.clicked.connect(self.__the_start_button_was_clicked)
 
         if self.input_path is not None:
+            self.input_path = PathHelper.get_abspath(self.input_path)
             text_input_path_label = 'Выбран файл: ' + self.input_path
         else:
             text_input_path_label = 'Выберите файл для конвертации'
@@ -32,6 +33,7 @@ class MainWindow(QMainWindow):
 
         text_output_path_label = 'Сохранить в: '
         if self.output_path is not None:
+            self.output_path = PathHelper.get_abspath(self.output_path)
             text_output_path_label += self.output_path
         self.output_path_label = QLabel(text_output_path_label)
 
@@ -58,10 +60,12 @@ class MainWindow(QMainWindow):
             return
 
         if self.output_path is None:
-            self.output_path: str = QFileDialog.getSaveFileName(caption='Сохранить файл', directory=self.input_path)[0]
-        self.output_path_label.setText('Сохранить в: ' + self.output_path)
+            self.output_path: str = QFileDialog.getSaveFileName(caption='Сохранить файл',
+                                                                directory=PathHelper.change_suffix(self.input_path))[0]
 
-        self.conversion_manager.convert(self.input_path, self.output_path + '.xml', 'csv')
+        self.output_path = PathHelper.change_suffix(self.output_path)
+        self.output_path_label.setText('Сохранить в: ' + self.output_path)
+        self.conversion_manager.convert(self.input_path, self.output_path, 'csv')
 
 
 class Application:
