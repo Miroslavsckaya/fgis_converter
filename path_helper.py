@@ -8,5 +8,4 @@ class PathHelper:
 
     @staticmethod
     def change_suffix(input_path: str):
-        a = pathlib.Path(input_path).with_suffix('.xml')
-        return str(a)
+        return str(pathlib.Path(input_path).with_suffix('.xml'))
