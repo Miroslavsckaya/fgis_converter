@@ -3,9 +3,9 @@ import pathlib
 
 class PathHelper:
     @staticmethod
-    def to_absolute(relative: str):
+    def to_absolute(relative: str) -> str:
         return str(pathlib.Path(relative).resolve())
 
     @staticmethod
-    def change_suffix(input_path: str):
+    def change_suffix(input_path: str) -> str:
         return str(pathlib.Path(input_path).with_suffix('.xml'))
