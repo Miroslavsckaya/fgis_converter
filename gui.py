@@ -7,13 +7,13 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout,
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, conversion_manager: ConversionManager, input_path: str | None, output_path: str | None) -> None:
+    def __init__(self, conversion_manager: ConversionManager, input_path: str, output_path: str) -> None:
         super().__init__()
         self.setMinimumSize(QSize(300, 150))
 
         self.conversion_manager: ConversionManager = conversion_manager
-        self.input_path: str | None = input_path
-        self.output_path: str | None = output_path
+        self.input_path: str = input_path
+        self.output_path: str = output_path
 
         self.setWindowTitle("Аршин-конвертер")
         self.layout = QVBoxLayout()
@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         search_button.clicked.connect(self.__the_search_button_was_clicked)
         start_button.clicked.connect(self.__the_start_button_was_clicked)
 
-        if self.input_path is not None:
+        if self.input_path:
             self.input_path = PathHelper.get_abspath(self.input_path)
             text_input_path_label = 'Выбран файл: ' + self.input_path
         else:
@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         self.input_path_label = QLabel(text_input_path_label)
 
         text_output_path_label = 'Сохранить в: '
-        if self.output_path is not None:
+        if self.output_path:
             self.output_path = PathHelper.get_abspath(self.output_path)
             text_output_path_label += self.output_path
         self.output_path_label = QLabel(text_output_path_label)
@@ -55,13 +55,15 @@ class MainWindow(QMainWindow):
             self.input_path_label.setText('Выбран файл: ' + self.input_path)
 
     def __the_start_button_was_clicked(self) -> None:
-        if self.input_path is None:
+        if not self.input_path:
             QMessageBox.warning(self, 'Файл не выбран', 'Выберите файл для конвертации')
             return
 
-        if self.output_path is None:
+        if not self.output_path:
             self.output_path: str = QFileDialog.getSaveFileName(caption='Сохранить файл',
                                                                 directory=PathHelper.change_suffix(self.input_path))[0]
+        if not self.output_path:
+            return
 
         self.output_path = PathHelper.change_suffix(self.output_path)
         self.output_path_label.setText('Сохранить в: ' + self.output_path)

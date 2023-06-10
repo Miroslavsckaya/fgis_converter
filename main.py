@@ -37,8 +37,8 @@ conversion_manager = ConversionManager(xml_serializer, dispatcher)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cli', action='store_true')
-parser.add_argument('input_path', nargs='?')
-parser.add_argument('output_path', nargs='?')
+parser.add_argument('input_path', default='', nargs='?')
+parser.add_argument('output_path', default='', nargs='?')
 args = vars(parser.parse_args())
 is_cli = args['cli']
 
