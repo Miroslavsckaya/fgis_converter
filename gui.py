@@ -20,15 +20,15 @@ class MainWindow(QMainWindow):
         self.layout = QVBoxLayout()
         button_layout = QHBoxLayout()
 
-        button1 = QPushButton("Обзор")
-        button2 = QPushButton("Начать")
-        button1.clicked.connect(self.the_button1_was_clicked)
-        button2.clicked.connect(self.the_button2_was_clicked)
+        search_button = QPushButton("Обзор")
+        start_button = QPushButton("Начать")
+        search_button.clicked.connect(self.__the_search_button_was_clicked)
+        start_button.clicked.connect(self.__the_start_button_was_clicked)
 
         self.label = QLabel('Выберите файл для конвертации')
 
-        button_layout.addWidget(button1)
-        button_layout.addWidget(button2)
+        button_layout.addWidget(search_button)
+        button_layout.addWidget(start_button)
 
         self.layout.addWidget(self.label)
         self.layout.addLayout(button_layout)
@@ -37,13 +37,13 @@ class MainWindow(QMainWindow):
         widget.setLayout(self.layout)
         self.setCentralWidget(widget)
 
-    def the_button1_was_clicked(self) -> None:
+    def __the_search_button_was_clicked(self) -> None:
         self.input_path: str = QFileDialog.getOpenFileName(caption='Выбрать файл', filter='CSV файлы (*.csv);;'
                                                                                      'Таблицы Excel (*.xlsx)')[0]
         if self.input_path:
             self.label.setText(self.input_path)
 
-    def the_button2_was_clicked(self) -> None:
+    def __the_start_button_was_clicked(self) -> None:
         if not self.input_path:
             QMessageBox.warning(self, 'Файл не выбран', 'Выберите файл для конвертации')
             return
