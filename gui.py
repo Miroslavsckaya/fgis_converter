@@ -61,11 +61,12 @@ class MainWindow(QMainWindow):
 
         if not self.output_path:
             self.output_path: str = QFileDialog.getSaveFileName(caption='Сохранить файл',
-                                                                directory=PathHelper.change_suffix(self.input_path))[0]
+                                                                directory=PathHelper.replace_extension(self.input_path,
+                                                                                                       '.xml'))[0]
         if not self.output_path:
             return
 
-        self.output_path = PathHelper.change_suffix(self.output_path)
+        self.output_path = PathHelper.replace_extension(self.output_path, '.xml')
         self.output_path_label.setText('Сохранить в: ' + self.output_path)
         self.conversion_manager.convert(self.input_path, self.output_path, 'csv')
 

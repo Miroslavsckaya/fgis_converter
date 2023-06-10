@@ -7,5 +7,5 @@ class PathHelper:
         return str(pathlib.Path(relative).resolve())
 
     @staticmethod
-    def change_suffix(input_path: str) -> str:
-        return str(pathlib.Path(input_path).with_suffix('.xml'))
+    def replace_extension(input_path: str, extension: str) -> str:
+        return str(pathlib.Path(input_path).with_suffix(extension))

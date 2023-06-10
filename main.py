@@ -26,7 +26,7 @@ def print_error(err: Exception, cli: bool) -> None:
 
 def get_output_path(input_path: str | None, output_path: str | None) -> str:
     if output_path is None:
-        return PathHelper.change_suffix(input_path)
+        return PathHelper.replace_extension(input_path, '.xml')
     return output_path
 
 

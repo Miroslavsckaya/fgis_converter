@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns0:application xmlns:ns0="urn://fgis-arshin.gost.ru/module-verifications/import/2020-06-19">
+  <ns0:result>
+    <ns0:miInfo>
+      <ns0:singleMI>
+        <ns0:mitypeNumber>16078-13</ns0:mitypeNumber>
+        <ns0:manufactureNum>29839342</ns0:manufactureNum>
+        <ns0:modification>?dfsf-15</ns0:modification>
+      </ns0:singleMI>
+    </ns0:miInfo>
+    <ns0:signCipher>ДГХ</ns0:signCipher>
+    <ns0:miOwner>ФИЗИЧЕСКОЕ ЛИЦО</ns0:miOwner>
+    <ns0:vrfDate>2023-02-08</ns0:vrfDate>
+    <ns0:validDate>2029-02-07</ns0:validDate>
+    <ns0:type>2</ns0:type>
+    <ns0:calibration>false</ns0:calibration>
+    <ns0:applicable>
+      <ns0:signPass>false</ns0:signPass>
+      <ns0:signMi>false</ns0:signMi>
+    </ns0:applicable>
+    <ns0:docTitle>МИ 1592-2015</ns0:docTitle>
+    <ns0:metrologist>?asfasf?.?.</ns0:metrologist>
+    <ns0:means>
+      <ns0:mieta>
+        <ns0:number>72850.18.3?.00703091</ns0:number>
+      </ns0:mieta>
+    </ns0:means>
+    <ns0:conditions>
+      <ns0:temperature>23,2 ?asfasf. ?</ns0:temperature>
+      <ns0:pressure>100,9</ns0:pressure>
+      <ns0:hymidity> afs38  %</ns0:hymidity>
+    </ns0:conditions>
+  </ns0:result>
+</ns0:application>
