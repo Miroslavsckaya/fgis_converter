@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):
         start_button.clicked.connect(self.__start_button_was_clicked)
 
         if self.input_path:
-            self.input_path = PathHelper.get_abspath(self.input_path)
+            self.input_path = PathHelper.to_absolute(self.input_path)
             text_input_path_label = 'Выбран файл: ' + self.input_path
         else:
             text_input_path_label = 'Выберите файл для конвертации'
@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
 
         text_output_path_label = 'Сохранить в: '
         if self.output_path:
-            self.output_path = PathHelper.get_abspath(self.output_path)
+            self.output_path = PathHelper.to_absolute(self.output_path)
             text_output_path_label += self.output_path
         self.output_path_label = QLabel(text_output_path_label)
 
