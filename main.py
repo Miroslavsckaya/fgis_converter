@@ -1,13 +1,12 @@
 #! python
+import gui
 import argparse
 import exceptions
 import logging
-import PySimpleGUIQt as sg
 from conversion_manager import ConversionManager
 from data_sources.csv import CsvDataSource
 from data_sources.dispatcher import DataSourceDispatcher
 from sys import exit
-from urllib.parse import urlparse
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
@@ -46,21 +45,7 @@ args = vars(parser.parse_args())
 is_cli = args['cli']
 
 if not is_cli:
-    input_path = sg.popup_get_file('Выберите файл для конвертации', title='Аршин', keep_on_top=True,
-                                   default_path=args['input_path'], file_types=(("CSV Files", "*.csv"),))
-    if input_path is None:
-        exit()
-
-    url = urlparse(input_path, allow_fragments=False)
-    if not url.path:
-        print_error(exceptions.FilePathError('Пустой путь'), is_cli)
-        exit(1)
-    if url.scheme in ('file', ''):
-        output_path = get_output_path(url.path, args['output_path'])
-        convert(url.path, output_path, conversion_manager, 'csv', is_cli)
-    else:
-        print_error(exceptions.FilePathError('Неподдерживаемая схема:', url.scheme), is_cli)
-        exit(1)
+    gui.Application.start(conversion_manager)
 else:
     output_path = get_output_path(args['input_path'], args['output_path'])
     convert(args['input_path'], output_path, conversion_manager, 'csv', is_cli)
