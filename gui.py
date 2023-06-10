@@ -72,7 +72,7 @@ class MainWindow(QMainWindow):
 
 class Application:
     @staticmethod
-    def start(conversion_manager: ConversionManager, input_path: str | None, output_path: str | None) -> None:
+    def start(conversion_manager: ConversionManager, input_path: str, output_path: str) -> None:
         app = QApplication([])
         app.setWindowIcon(QIcon('icons/RST.ico'))
 
