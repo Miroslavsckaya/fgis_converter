@@ -26,7 +26,7 @@ def print_error(err: Exception, cli: bool) -> None:
         sg.popup_error(*err.args)
 
 
-def get_output_path(input_path: str, output_path: str | None) -> str:
+def get_output_path(input_path: str | None, output_path: str | None) -> str:
     if output_path is None:
         return input_path + '.xml'
     return output_path
@@ -39,13 +39,13 @@ conversion_manager = ConversionManager(xml_serializer, dispatcher)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cli', action='store_true')
-parser.add_argument('input_path', default='', nargs='?')
+parser.add_argument('input_path', nargs='?')
 parser.add_argument('output_path', nargs='?')
 args = vars(parser.parse_args())
 is_cli = args['cli']
 
 if not is_cli:
-    gui.Application.start(conversion_manager)
+    gui.Application.start(conversion_manager, args['input_path'], args['output_path'])
 else:
     output_path = get_output_path(args['input_path'], args['output_path'])
     convert(args['input_path'], output_path, conversion_manager, 'csv', is_cli)
