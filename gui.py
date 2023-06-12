@@ -53,14 +53,14 @@ class MainWindow(QMainWindow):
         if input_path:
             self.line_edit_input_file.setText(input_path)
             if not self.line_edit_output_file.text():
-                self.line_edit_output_file.setText(PathHelper.replace_extension(input_path, '.xml'))
+                self.line_edit_output_file.setText(PathHelper.replace_suffix(input_path, '.xml'))
 
     def __search_output_button_clicked(self) -> None:
         output_path: str = QFileDialog.getSaveFileName(caption='Сохранить файл')[0]
         if not output_path:
             return
 
-        output_path = PathHelper.replace_extension(output_path, '.xml')
+        output_path = PathHelper.replace_suffix(output_path, '.xml')
         self.line_edit_output_file.setText(output_path)
 
     def __start_button_clicked(self) -> None:
