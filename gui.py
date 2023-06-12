@@ -1,47 +1,31 @@
 from conversion_manager import ConversionManager
 from path_helper import PathHelper
-from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, \
-    QLineEdit, QWidget, QFileDialog, QMessageBox
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QWidget, QFileDialog, \
+    QMessageBox, QGridLayout
 
 
 class MainWindow(QMainWindow):
     def __init__(self, conversion_manager: ConversionManager, input_path: str, output_path: str) -> None:
         super().__init__()
-        self.setMinimumSize(QSize(450, 150))
+        self.setWindowTitle("Аршин-конвертер")
 
         self.conversion_manager: ConversionManager = conversion_manager
-
-        self.setWindowTitle("Аршин-конвертер")
-        self.layout = QVBoxLayout()
-        input_layout = QHBoxLayout()
-        output_layout = QHBoxLayout()
+        self.layout = QGridLayout()
 
         text_input_file_label = QLabel('Выбрать файл')
-        text_input_file_label.setMinimumSize(QSize(85, 15))
         self.line_edit_input_file = QLineEdit()
         button_search_input_file = QPushButton("Обзор")
 
-        input_layout.addWidget(text_input_file_label)
-        input_layout.addWidget(self.line_edit_input_file)
-        input_layout.addWidget(button_search_input_file)
-
         text_output_file_label = QLabel('Сохранить в')
-        text_output_file_label.setMinimumSize(QSize(85, 15))
         self.line_edit_output_file = QLineEdit()
         button_search_output_file = QPushButton("Обзор")
 
-        output_layout.addWidget(text_output_file_label)
-        output_layout.addWidget(self.line_edit_output_file)
-        output_layout.addWidget(button_search_output_file)
-
-        start_button = QPushButton("Начать")
-        start_button.setFixedSize(QSize(85, 25))
+        button_start = QPushButton("Начать")
 
         button_search_input_file.clicked.connect(self.__search_input_button_clicked)
         button_search_output_file.clicked.connect(self.__search_output_button_clicked)
-        start_button.clicked.connect(self.__start_button_clicked)
+        button_start.clicked.connect(self.__start_button_clicked)
 
         if input_path:
             input_path = PathHelper.to_absolute(input_path)
@@ -50,9 +34,14 @@ class MainWindow(QMainWindow):
             output_path = PathHelper.to_absolute(output_path)
             self.line_edit_output_file.setText(output_path)
 
-        self.layout.addLayout(input_layout)
-        self.layout.addLayout(output_layout)
-        self.layout.addWidget(start_button)
+        self.layout.addWidget(text_input_file_label, 0, 0)
+        self.layout.addWidget(self.line_edit_input_file, 0, 1)
+        self.layout.addWidget(button_search_input_file, 0, 2)
+        self.layout.addWidget(text_output_file_label, 1, 0)
+        self.layout.addWidget(self.line_edit_output_file, 1, 1)
+        self.layout.addWidget(button_search_output_file, 1, 2)
+        self.layout.addWidget(button_start, 2, 2)
+        self.layout.setColumnMinimumWidth(1, 250)
 
         widget = QWidget()
         widget.setLayout(self.layout)
