@@ -13,35 +13,16 @@ class MainWindow(QMainWindow):
         self.conversion_manager: ConversionManager = conversion_manager
         self.layout = QGridLayout()
 
-        text_input_file_label = QLabel('Выбрать файл')
-        self.line_edit_input_file = QLineEdit()
-        button_search_input_file = QPushButton("Обзор")
+        widgets: list[list] = []
+        widgets.append(self.__create_input_file_widgets())
+        widgets.append(self.__create_output_file_widgets())
 
-        text_output_file_label = QLabel('Сохранить в')
-        self.line_edit_output_file = QLineEdit()
-        button_search_output_file = QPushButton("Обзор")
+        self.button_start = QPushButton("Начать")
+        widgets.append([self.button_start])
 
-        button_start = QPushButton("Начать")
-
-        button_search_input_file.clicked.connect(self.__search_input_button_clicked)
-        button_search_output_file.clicked.connect(self.__search_output_button_clicked)
-        button_start.clicked.connect(self.__start_button_clicked)
-
-        if input_path:
-            input_path = PathHelper.to_absolute(input_path)
-            self.line_edit_input_file.setText(input_path)
-        if output_path:
-            output_path = PathHelper.to_absolute(output_path)
-            self.line_edit_output_file.setText(output_path)
-
-        self.layout.addWidget(text_input_file_label, 0, 0)
-        self.layout.addWidget(self.line_edit_input_file, 0, 1)
-        self.layout.addWidget(button_search_input_file, 0, 2)
-        self.layout.addWidget(text_output_file_label, 1, 0)
-        self.layout.addWidget(self.line_edit_output_file, 1, 1)
-        self.layout.addWidget(button_search_output_file, 1, 2)
-        self.layout.addWidget(button_start, 2, 2)
-        self.layout.setColumnMinimumWidth(1, 250)
+        self.__connect_buttons()
+        self.__set_text_to_line_edit(input_path, output_path)
+        self.__init_layout(widgets)
 
         widget = QWidget()
         widget.setLayout(self.layout)
@@ -74,6 +55,45 @@ class MainWindow(QMainWindow):
             return
 
         self.conversion_manager.convert(input_path, output_path, 'csv')
+
+    def __create_input_file_widgets(self) -> list[QLabel | QLineEdit | QPushButton]:
+        widgets_row: list[QLabel | QLineEdit | QPushButton] = []
+        widgets_row.append(QLabel('Выбрать файл'))
+        self.line_edit_input_file = QLineEdit()
+        widgets_row.append(self.line_edit_input_file)
+        self.button_search_input_file = QPushButton("Обзор")
+        widgets_row.append(self.button_search_input_file)
+        return widgets_row
+
+    def __create_output_file_widgets(self) -> list[QLabel | QLineEdit | QPushButton]:
+        widgets_row: list[QLabel | QLineEdit | QPushButton] = []
+        widgets_row.append(QLabel('Сохранить в'))
+        self.line_edit_output_file = QLineEdit()
+        widgets_row.append(self.line_edit_output_file)
+        self.button_search_output_file = QPushButton("Обзор")
+        widgets_row.append(self.button_search_output_file)
+        return widgets_row
+
+    def __connect_buttons(self) -> None:
+        self.button_search_input_file.clicked.connect(self.__search_input_button_clicked)
+        self.button_search_output_file.clicked.connect(self.__search_output_button_clicked)
+        self.button_start.clicked.connect(self.__start_button_clicked)
+
+    def __init_layout(self, widgets: list[list]) -> None:
+        for i, row in enumerate(widgets):
+            for j, widget in enumerate(row):
+                if i == 2:
+                    j += 2
+                self.layout.addWidget(widget, i, j)
+        self.layout.setColumnMinimumWidth(1, 250)
+
+    def __set_text_to_line_edit(self, input_path, output_path) -> None:
+        if input_path:
+            input_path = PathHelper.to_absolute(input_path)
+            self.line_edit_input_file.setText(input_path)
+        if output_path:
+            output_path = PathHelper.to_absolute(output_path)
+            self.line_edit_output_file.setText(output_path)
 
 
 class Application:
