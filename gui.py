@@ -18,37 +18,37 @@ class MainWindow(QMainWindow):
         input_layout = QHBoxLayout()
         output_layout = QHBoxLayout()
 
-        input_label = QLabel('Выбрать файл')
-        input_label.setMinimumSize(QSize(85, 15))
-        self.input_line_edit = QLineEdit()
-        search_input_button = QPushButton("Обзор")
+        text_input_file_label = QLabel('Выбрать файл')
+        text_input_file_label.setMinimumSize(QSize(85, 15))
+        self.line_edit_input_file = QLineEdit()
+        button_search_input_file = QPushButton("Обзор")
 
-        input_layout.addWidget(input_label)
-        input_layout.addWidget(self.input_line_edit)
-        input_layout.addWidget(search_input_button)
+        input_layout.addWidget(text_input_file_label)
+        input_layout.addWidget(self.line_edit_input_file)
+        input_layout.addWidget(button_search_input_file)
 
-        output_label = QLabel('Сохранить в')
-        output_label.setMinimumSize(QSize(85, 15))
-        self.output_line_edit = QLineEdit()
-        search_output_button = QPushButton("Обзор")
+        text_output_file_label = QLabel('Сохранить в')
+        text_output_file_label.setMinimumSize(QSize(85, 15))
+        self.line_edit_output_file = QLineEdit()
+        button_search_output_file = QPushButton("Обзор")
 
-        output_layout.addWidget(output_label)
-        output_layout.addWidget(self.output_line_edit)
-        output_layout.addWidget(search_output_button)
+        output_layout.addWidget(text_output_file_label)
+        output_layout.addWidget(self.line_edit_output_file)
+        output_layout.addWidget(button_search_output_file)
 
         start_button = QPushButton("Начать")
         start_button.setFixedSize(QSize(85, 25))
 
-        search_input_button.clicked.connect(self.__search_input_button_clicked)
-        search_output_button.clicked.connect(self.__search_output_button_clicked)
+        button_search_input_file.clicked.connect(self.__search_input_button_clicked)
+        button_search_output_file.clicked.connect(self.__search_output_button_clicked)
         start_button.clicked.connect(self.__start_button_clicked)
 
         if input_path:
             input_path = PathHelper.to_absolute(input_path)
-            self.input_line_edit.setText(input_path)
+            self.line_edit_input_file.setText(input_path)
         if output_path:
             output_path = PathHelper.to_absolute(output_path)
-            self.output_line_edit.setText(output_path)
+            self.line_edit_output_file.setText(output_path)
 
         self.layout.addLayout(input_layout)
         self.layout.addLayout(output_layout)
@@ -62,9 +62,9 @@ class MainWindow(QMainWindow):
         input_path: str = QFileDialog.getOpenFileName(caption='Выбрать файл', filter='CSV файлы (*.csv);;'
                                                                                      'Таблицы Excel (*.xlsx)')[0]
         if input_path:
-            self.input_line_edit.setText(input_path)
-            if not self.output_line_edit.text():
-                self.output_line_edit.setText(PathHelper.replace_extension(input_path, '.xml'))
+            self.line_edit_input_file.setText(input_path)
+            if not self.line_edit_output_file.text():
+                self.line_edit_output_file.setText(PathHelper.replace_extension(input_path, '.xml'))
 
     def __search_output_button_clicked(self) -> None:
         output_path: str = QFileDialog.getSaveFileName(caption='Сохранить файл')[0]
@@ -72,11 +72,11 @@ class MainWindow(QMainWindow):
             return
 
         output_path = PathHelper.replace_extension(output_path, '.xml')
-        self.output_line_edit.setText(output_path)
+        self.line_edit_output_file.setText(output_path)
 
     def __start_button_clicked(self) -> None:
-        input_path = self.input_line_edit.text()
-        output_path = self.output_line_edit.text()
+        input_path = self.line_edit_input_file.text()
+        output_path = self.line_edit_output_file.text()
         if not input_path:
             QMessageBox.warning(self, 'Файл не выбран', 'Выберите файл для конвертации')
             return
