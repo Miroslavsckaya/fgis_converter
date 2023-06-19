@@ -1,5 +1,6 @@
 import csv
 import logging
+import re
 from data_sources.base import BaseFileDataSource
 from data_sources.interface import DataSourceInterface, VerificationData
 from typing import Generator
@@ -30,6 +31,6 @@ class CsvDataSource(BaseFileDataSource, DataSourceInterface):
         if not all(row[:4] + row[5:10]):
             logging.warning(f'Строка №{line_num} не может быть cконвертирована. Все поля должны быть заполнены')
             return None
-        return VerificationData(reg_num=row[0], factory_num=row[1], modification=row[2], ver_date=row[3], 
-                                valid_date=row[4], metrologist=row[5], test_dev_num=row[6], temperature=row[7], 
-                                pressure=row[8], humidity=row[9])
+        return VerificationData(reg_num=re.sub(r' +', '', row[0]), factory_num=re.sub(r' +', '', row[1]), 
+                                modification=row[2], ver_date=row[3], valid_date=row[4], metrologist=row[5], 
+                                test_dev_num=row[6], temperature=row[7], pressure=row[8], humidity=row[9])
