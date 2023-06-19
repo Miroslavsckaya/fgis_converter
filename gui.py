@@ -1,8 +1,25 @@
 from conversion_manager import ConversionManager
 from path_helper import PathHelper
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QDragEnterEvent, QDropEvent
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QWidget, QFileDialog, \
     QMessageBox, QGridLayout
+
+
+class LineEdit(QLineEdit):
+    def __init__(self):
+        super().__init__()
+        self.setDragEnabled(True)
+
+    def dragEnterEvent(self, event: QDragEnterEvent) -> None:
+        data = event.mimeData()
+        if data.hasUrls() and data.urls()[0].scheme() == 'file':
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event: QDropEvent) -> None:
+        path = event.mimeData().urls()[0].toLocalFile()
+        self.setText(path)
 
 
 class MainWindow(QMainWindow):
@@ -14,11 +31,11 @@ class MainWindow(QMainWindow):
         self.layout = QGridLayout()
 
         text_input_file_label = QLabel('Выбрать файл')
-        self.line_edit_input_file = QLineEdit()
+        self.line_edit_input_file = LineEdit()
         button_search_input_file = QPushButton("Обзор")
 
         text_output_file_label = QLabel('Сохранить в')
-        self.line_edit_output_file = QLineEdit()
+        self.line_edit_output_file = LineEdit()
         button_search_output_file = QPushButton("Обзор")
 
         button_start = QPushButton("Начать")
