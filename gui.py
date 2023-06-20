@@ -101,6 +101,8 @@ class MainWindow(QMainWindow):
             return
 
         self.conversion_manager.convert(input_path, output_path, 'csv')
+        self.line_edit_input_file.setText('')
+        self.line_edit_output_file.setText('')
 
 
 class Application:
