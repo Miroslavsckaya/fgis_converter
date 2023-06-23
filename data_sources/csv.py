@@ -31,8 +31,8 @@ class CsvDataSource(BaseFileDataSource, DataSourceInterface):
         if not all(row[:4] + row[5:10]):
             logging.warning(f'Строка №{line_num} не может быть cконвертирована. Все поля должны быть заполнены')
             return None
-        return VerificationData(reg_num=re.sub(r' +', '', row[0]), 
-                                factory_num=re.sub(r' +', '', row[1]),
+        return VerificationData(reg_num=re.sub(r'[ \xa0]+', '', row[0]), 
+                                factory_num=re.sub(r'[ \xa0]+', '', row[1]),
                                 modification=row[2],
                                 ver_date=row[3],
                                 valid_date=row[4],
