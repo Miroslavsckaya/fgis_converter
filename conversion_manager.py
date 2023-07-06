@@ -18,7 +18,7 @@ class ConversionManager:
     @staticmethod
     def __write_to_file(xml: str, file_path: str) -> None:
         try:
-            file = open(file_path, 'w')
+            file = open(file_path, 'w', encoding='UTF-8')
         except PermissionError:
             raise exceptions.FilePermissionError('Файл недоступен для записи', file_path)
         file.write(xml)
