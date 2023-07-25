@@ -1,6 +1,7 @@
 import csv
 import logging
 import re
+from checker import Checker
 from data_sources.base import BaseFileDataSource
 from data_sources.interface import DataSourceInterface, VerificationData
 from typing import Generator
@@ -32,7 +33,7 @@ class CsvDataSource(BaseFileDataSource, DataSourceInterface):
             return
         
         reg_num = re.sub(r'[ \xa0]+', '',  row[0])
-        if not self._reg_num_is_valid(reg_num):
+        if not Checker.reg_num_is_valid(reg_num):
             logging.error(f'Счетчик {reg_num} {row[1]} {row[2]} не может быть занесен. Неверный регномер или другая методика поверки')
             return
         

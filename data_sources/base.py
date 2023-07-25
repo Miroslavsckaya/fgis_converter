@@ -1,4 +1,3 @@
-import constants
 import exceptions
 from chardet.universaldetector import UniversalDetector
 from typing import BinaryIO, IO
@@ -26,6 +25,3 @@ class BaseFileDataSource:
         detector.close()
         return detector.result['encoding']
     
-    @staticmethod
-    def _reg_num_is_valid(reg_num: str) -> bool:
-        return reg_num in constants.TYPES
