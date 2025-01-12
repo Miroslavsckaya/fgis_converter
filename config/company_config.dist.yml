@@ -1,5 +1,8 @@
-sign_cipher: # add your sign cipher
+sign_cipher: 'XYZ' # add your sign cipher
 test_devices:
-    - # add your test device numbers
+    # add your test device numbers
+    - '1234.5X.67890'
 date_formats:
-    - # add all date formats 
+    # add your all used date formats.
+    # More details here: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+    - '%d.%m.%Y'
