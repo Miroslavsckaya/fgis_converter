@@ -1,5 +1,6 @@
 import arshin
 import exceptions
+import config
 from data_sources.interface import VerificationData
 from datetime import datetime, date, timedelta
 from typing import Generator
@@ -23,10 +24,12 @@ class RecInfoFactory:
     def create_from_verification_data(verification_data: VerificationData) -> arshin.RecInfo:
         verification = RecInfoFactory.__create_default()
         verification.mi_info = MiInfoFactory.create_from_verification_data(verification_data)
-        verification.vrf_date = RecInfoFactory.__create_xmldate_from_string(verification_data.ver_date)
+        verification.vrf_date = RecInfoFactory.__create_xmldate_from_string(verification_data.ver_date, config.company_config['date_formats'])
+        verification.sign_cipher = config.company_config['sign_cipher']
+        verification.doc_title = config.valid_regnums[verification_data.reg_num]
 
         try:
-            verification.valid_date = RecInfoFactory.__create_xmldate_from_string(verification_data.valid_date)
+            verification.valid_date = RecInfoFactory.__create_xmldate_from_string(verification_data.valid_date, config.company_config['date_formats'])
         except exceptions.DateError:
             verification.inapplicable = verification.Inapplicable()
             verification.inapplicable.reasons = 'Не соответствует требованиям МП'
@@ -44,24 +47,22 @@ class RecInfoFactory:
     @staticmethod
     def __create_default() -> arshin.RecInfo:
         verification = arshin.RecInfo()
-        verification.sign_cipher = 'ДГХ'
         verification.mi_owner = 'ФИЗИЧЕСКОЕ ЛИЦО'
         verification.type = arshin.RecInfoType.VALUE_2
         verification.calibration = False
-        verification.doc_title = 'МИ 1592-2015'
         return verification
 
     @staticmethod
-    def __create_xmldate_from_string(string: str) -> XmlDate:
-        try:
-            meter_date = datetime.strptime(string, '%d.%m.%Y').date()
-        except ValueError:
+    def __create_xmldate_from_string(string: str, date_formats: list[str]) -> XmlDate:
+        for date_format in date_formats:
             try:
-                meter_date = datetime.strptime(string, '%d/%m/%Y').date()
+                meter_date = datetime.strptime(string, date_format).date()
+                return XmlDate.from_date(meter_date)
             except ValueError:
-                raise exceptions.DateError('Неверный формат даты:', string,
-                                           'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
-        return XmlDate.from_date(meter_date)
+                continue
+
+        raise exceptions.DateError('Неверный формат даты:', string,
+                                    'Допустимые форматы: ДД.ММ.ГГГГ, ДД/ММ/ГГГГ')
 
     @staticmethod
     def __last_valid_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:

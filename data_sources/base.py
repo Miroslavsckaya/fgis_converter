@@ -24,3 +24,4 @@ class BaseFileDataSource:
                 break
         detector.close()
         return detector.result['encoding']
+    
