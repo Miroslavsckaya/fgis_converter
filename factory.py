@@ -39,7 +39,7 @@ class RecInfoFactory:
             verification.applicable.sign_pass = verification.applicable.sign_mi = False
 
         verification.metrologist = verification_data.metrologist
-        verification.means = MeansFactory.create_test(verification_data.test_dev_num)
+        verification.means = MeansFactory.create_test(verification_data.test_dev_num, config.company_config['test_devices'])
         verification.conditions = ConditionsFactory.create_from_verification_data(verification_data)
 
         return verification
@@ -84,10 +84,16 @@ class MiInfoFactory:
 
 class MeansFactory:
     @staticmethod
-    def create_test(number: str) -> arshin.RecInfo.Means:
+    def create_test(number: str, test_devices: dict) -> arshin.RecInfo.Means:
         test = arshin.RecInfo.Means()
         test.mieta = test.Mieta()
         test.mieta.number = number
+        test.mis = test.Mis()
+        for measure_ins in test_devices[number].values():
+            addmi = test.mis.Mi()
+            addmi.type_num = measure_ins['regnum']
+            addmi.manufacture_num = measure_ins['manufacture_num']
+            test.mis.mi.append(addmi)
         return test
 
 
