@@ -1,7 +1,14 @@
 sign_cipher: 'XYZ' # add your sign cipher
 test_devices:
     # add your test device numbers
-    - '1234.5X.67890'
+    '1234.5X.67890':
+    # add your additional measuring instruments
+        mi1:
+            regnum: 345
+            manufacture_num: 123
+        mi2:
+            regnum: 678
+            manufacture_num: 23123
 date_formats:
     # add your all used date formats.
     # More details here: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
