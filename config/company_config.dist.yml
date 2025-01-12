@@ -1,7 +1,7 @@
 sign_cipher: 'XYZ' # add your sign cipher
 test_devices:
     # add your test device numbers
-    '1234.5X.67890'
+    '1234.5X.67890':
     # add your additional measuring instruments
         mi1:
             regnum: 345
