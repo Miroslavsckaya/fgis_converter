@@ -66,7 +66,15 @@ class RecInfoFactory:
 
     @staticmethod
     def __last_valid_day(vrf_date: XmlDate, valid_date: XmlDate) -> XmlDate:
-        valid_date = date(valid_date.year, vrf_date.month, vrf_date.day)
+        try:
+            valid_date = date(valid_date.year, vrf_date.month, vrf_date.day)
+        except ValueError:
+            if not (vrf_date.month == 2 and vrf_date.day == 29):
+                raise ValueError
+            valid_date = date(valid_date.year, vrf_date.month, vrf_date.day - 1)
+
+            return XmlDate.from_date(valid_date)
+
         delta = timedelta(days=LAST_VALID_DAY_INTERVAL)
         return XmlDate.from_date(valid_date - delta)
 
