@@ -72,6 +72,9 @@ class RecInfoFactory:
         try:
             valid_date = date(valid_date.year, vrf_date.month, vrf_date.day)
         except ValueError:
+            # Most meters require next verification to occur in more than 4 full years, so there could be no February 29th
+            # in that specific year. Here we subtract one day to make the last validity day February 28th.
+
             if not (vrf_date.month == 2 and vrf_date.day == 29):
                 raise ValueError
             valid_date = date(valid_date.year, vrf_date.month, vrf_date.day - 1)
@@ -79,6 +82,7 @@ class RecInfoFactory:
             return XmlDate.from_date(valid_date)
 
         delta = timedelta(days=LAST_VALID_DAY_INTERVAL)
+
         return XmlDate.from_date(valid_date - delta)
 
 
